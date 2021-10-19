@@ -11,8 +11,7 @@ def upload(file):
         "Authorization": info["tos_sign"],
         "Content-CRC32": crc32(file).lower()
     }
-    files = open(file, "rb").read()
-    response = requests.put(url, headers=headers, data=files).json()
+    response = requests.put(url, headers=headers, data=file).json()
     if response["success"] == 0:
         return info
     print("上传视频失败", response)
