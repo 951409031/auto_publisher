@@ -1,14 +1,15 @@
 import os
 import requests
-from publisher.config.index import config
+from config.index import Config
 from publisher.libs.video import confirm
 
 
 def create(meta):
+    config = Config()
     info = confirm(meta["file"])
     url = "https://media.douyin.com/web/api/media/aweme/create/"
     headers = {
-        "Cookie": config["Cookie"]
+        "Cookie": config.get("douyin_cookie")
     }
     data = {
         "video_id": info["vid"],
@@ -25,8 +26,9 @@ def create(meta):
     }
     response = requests.post(url, headers=headers, data=data).json()
     if response["status_code"] == 0:
-        print("---上传成功---")
-    return response
+        print("---上传成功---", meta["text"])
+        return response
+    print("---douyin_cookie 失效, 请更新--")
 
 
 if __name__ == '__main__':
